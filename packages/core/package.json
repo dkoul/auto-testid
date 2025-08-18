@@ -1,0 +1,60 @@
+{
+  "name": "@dkoul/auto-testid-core",
+  "version": "1.0.0",
+  "description": "Core AST parsing and transformation logic for auto-testid generator",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "build:watch": "tsc -b --watch",
+    "clean": "rimraf dist",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "validate": "npm run lint && npm run test && npm run build"
+  },
+  "keywords": [
+    "ast",
+    "parsing",
+    "transformation",
+    "data-testid",
+    "react",
+    "vue",
+    "angular",
+    "html"
+  ],
+  "author": "Auto-TestID Team",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/parser": "^7.22.0",
+    "@babel/types": "^7.22.0",
+    "@babel/traverse": "^7.22.0",
+    "@babel/generator": "^7.22.0",
+    "@vue/compiler-sfc": "^3.3.0",
+    "@angular/compiler": "^16.0.0",
+    "cheerio": "^1.0.0-rc.12",
+    "glob": "^10.3.0",
+    "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.31",
+    "@types/glob": "^8.1.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.4.0",
+    "jest": "^29.6.0",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.1.0"
+  },
+  "peerDependencies": {
+    "typescript": ">=4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+} 

@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+// Auto-TestID CLI Executable
+// This script serves as the entry point for the auto-testid CLI tool
+
+const path = require('path');
+const fs = require('fs');
+
+// Determine the CLI main script location
+const cliPath = path.join(__dirname, '..', 'dist', 'cli.js');
+
+// Check if the CLI has been built
+if (!fs.existsSync(cliPath)) {
+  console.error('❌ CLI not built. Please run "npm run build" first.');
+  process.exit(1);
+}
+
+// Execute the CLI
+require(cliPath); 
