@@ -1,6 +1,54 @@
 # Auto-TestID Usage Guide
 
-A practical guide for using the `@dkoul/auto-testid-cli` package to automatically add data-testid attributes to React components.
+A powerful tool for automatically adding custom attributes to React and Vue.js components for testing, analytics, and automation.
+
+## 🚀 What's New in V2.0
+
+### ✨ **Configurable Attribute Names**
+No longer limited to `data-testid`! Generate any custom attribute for multiple use cases:
+
+```bash
+# E2E Testing (default)
+auto-testid generate ./src --attribute-name data-testid --prefix test
+
+# Analytics Tracking  
+auto-testid generate ./src --attribute-name data-analytics --prefix track
+
+# QA Automation
+auto-testid generate ./src --attribute-name data-qa --prefix qa
+
+# Custom Attributes
+auto-testid generate ./src --attribute-name data-custom --prefix my
+```
+
+**Results:**
+- `data-testid="test-login-form"`
+- `data-analytics="track-submit-btn"` 
+- `data-qa="qa-email-input"`
+- `data-custom="my-container"`
+
+### 🎯 **Vue.js Support**
+Full support for Vue Single File Components (.vue files):
+
+```bash
+# Process Vue components
+auto-testid generate ./src --framework vue
+
+# Works with all Vue syntax
+auto-testid generate ./src --framework vue --attribute-name data-track --prefix analytics
+```
+
+**Supported Vue Features:**
+- ✅ Single File Components (.vue)
+- ✅ Template sections with HTML elements  
+- ✅ Vue directives (`v-model`, `@click`, `:disabled`, etc.)
+- ✅ Vue 2 & Vue 3 compatible syntax
+- ✅ Scoped styles and script sections preserved
+
+### 🔄 **Backward Compatibility**
+All existing V1 functionality preserved - upgrade seamlessly!
+
+---
 
 ## Installation
 
@@ -41,10 +89,17 @@ Files to process:
 ```
 
 ### 2. Dry Run (Preview Changes)
-See what data-testid attributes would be added without modifying files:
+See what attributes would be added without modifying files:
 
 ```bash
+# React components
 auto-testid generate ./src --dry-run --framework react
+
+# Vue components  
+auto-testid generate ./src --dry-run --framework vue
+
+# Custom attributes for analytics
+auto-testid generate ./src --dry-run --attribute-name data-analytics --prefix track
 ```
 
 This shows you:
@@ -57,12 +112,16 @@ This shows you:
 Apply the changes with backup files for safety:
 
 ```bash
+# React components with data-testid
 auto-testid generate ./src --framework react --backup
+
+# Vue components with custom attributes
+auto-testid generate ./src --framework vue --attribute-name data-analytics --prefix track --backup
 ```
 
 This will:
 - Create `.bak` files for all modified files
-- Add data-testid attributes to React components
+- Add custom attributes to React/Vue components
 - Show detailed results and performance metrics
 
 ## Command Reference
@@ -87,6 +146,7 @@ Essential Options:
 - `--framework <type>`: Specify framework (react, vue, angular, html)
 
 Advanced Options:
+- `--attribute-name <name>`: Custom attribute name (default: "data-testid")
 - `--prefix <string>`: Custom prefix for test IDs (default: "test")
 - `--naming <style>`: Naming convention (kebab-case, camelCase, snake_case)
 - `--exclude <patterns>`: Exclude file patterns
@@ -99,9 +159,10 @@ auto-testid examples
 
 Shows usage examples and common patterns.
 
-## Real-World Usage Example
+## Real-World Usage Examples
 
-Based on processing a React Electron app:
+### React E2E Testing Setup
+Processing a React Electron app:
 
 ```bash
 # Step 1: Scan the project
@@ -117,23 +178,56 @@ auto-testid generate ./src --framework react --backup
 # Result: Successfully added 231 data-testid attributes across 10 components
 ```
 
+### Vue.js Component Processing
+Processing a Vue.js application:
+
+```bash
+# Step 1: Scan Vue files
+auto-testid scan ./src --framework vue --stats
+# Result: Found 15 Vue files (.vue components)
+
+# Step 2: Preview with custom attributes
+auto-testid generate ./src --dry-run --framework vue --attribute-name data-qa --prefix qa
+# Result: Would add 145 data-qa attributes to 198 elements
+
+# Step 3: Apply analytics tracking
+auto-testid generate ./src --framework vue --attribute-name data-analytics --prefix track --backup
+# Result: Successfully added 140 data-analytics attributes across 12 components
+```
+
 ## Understanding the Output
 
-### Generated Test IDs
-The tool creates semantic, context-aware test IDs:
+### Generated Attributes
+The tool creates semantic, context-aware attributes for any use case:
 
+**React Examples:**
 ```tsx
-// Containers
-<div className="h-screen bg-gray-50" data-testid="test-screen-bg-container">
+// Default data-testid
+<div className="login-form" data-testid="test-form-login-container">
+<button type="submit" data-testid="test-submit-btn">Sign In</button>
+<input type="email" data-testid="test-email-input" />
 
-// Interactive elements
-<button disabled={!hasContent} data-testid="test-full-flex-btn">
+// Custom analytics attributes
+<div className="dashboard" data-analytics="track-dashboard-container">
+<button onClick={handleClick} data-analytics="track-action-btn">Click Me</button>
+```
 
-// Form inputs
-<input type="file" className="hidden" data-testid="test-file-hidden-input" />
+**Vue Examples:**
+```vue
+<!-- Default data-testid -->
+<template>
+  <div class="user-profile" data-testid="test-profile-user-container">
+    <button @click="save" data-testid="test-save-btn">Save</button>
+    <input v-model="name" data-testid="test-name-input" />
+  </div>
+</template>
 
-// Text elements
-<span data-testid="test-text-1">{buttonText}</span>
+<!-- Custom QA attributes -->
+<template>  
+  <form class="contact-form" data-qa="qa-contact-form">
+    <button type="submit" data-qa="qa-submit-btn">Submit</button>
+  </form>
+</template>
 ```
 
 ### Performance Metrics
@@ -239,13 +333,28 @@ const container = getByTestId('test-screen-bg-container');
 
 Create `.autotestidrc.json` in your project root:
 
+**Default Testing Setup:**
 ```json
 {
+  "attributeName": "data-testid",
   "prefix": "test",
-  "naming": "kebab-case",
-  "frameworks": ["react"],
+  "naming": "kebab-case", 
+  "frameworks": ["react", "vue"],
   "exclude": ["**/*.test.*", "**/*.spec.*"],
   "maxLength": 50,
+  "backup": true
+}
+```
+
+**Analytics Tracking Setup:**
+```json
+{
+  "attributeName": "data-analytics", 
+  "prefix": "track",
+  "naming": "camelCase",
+  "frameworks": ["react", "vue"],
+  "exclude": ["**/node_modules/**", "**/test/**"],
+  "maxLength": 60,
   "backup": true
 }
 ```
@@ -260,8 +369,27 @@ auto-testid generate ./src
 1. **Always use --dry-run first** to preview changes
 2. **Enable --backup** for safety on production code
 3. **Commit changes separately** from feature work
-4. **Review generated IDs** for semantic accuracy
+4. **Review generated attributes** for semantic accuracy
 5. **Use framework-specific commands** for better performance
-6. **Exclude test files** to avoid adding IDs to test code
+6. **Exclude test files** to avoid adding attributes to test code
+7. **Choose meaningful attribute names** for your use case
+8. **Use consistent prefixes** across your application
 
-This tool transforms your React components to be immediately ready for robust E2E testing with any modern testing framework. 
+## Use Cases
+
+- 🧪 **E2E Testing**: `data-testid` attributes for Cypress, Playwright, Selenium
+- 📊 **Analytics Tracking**: `data-analytics` attributes for user behavior analysis  
+- 🔍 **QA Automation**: `data-qa` attributes for quality assurance workflows
+- 🎯 **A/B Testing**: `data-experiment` attributes for testing frameworks
+- 🤖 **Custom Automation**: Any custom attribute for your specific needs
+
+## Framework Support
+
+| Framework | Status | File Types | Features |
+|-----------|--------|------------|----------|
+| **React** | ✅ Full | `.jsx`, `.tsx`, `.js`, `.ts` | JSX parsing, TypeScript support |
+| **Vue.js** | ✅ Full | `.vue` | SFC parsing, Vue directives |
+| **Angular** | 🚧 Planned | `.html`, `.ts` | Coming soon |
+| **HTML** | 🚧 Planned | `.html` | Coming soon |
+
+This tool transforms your React and Vue.js components for testing, analytics, and automation workflows with any modern framework. 

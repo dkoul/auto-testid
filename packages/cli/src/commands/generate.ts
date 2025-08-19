@@ -11,6 +11,7 @@ interface GenerateOptions {
   exclude?: string[];
   include?: string[];
   prefix?: string;
+  attributeName?: string;
   naming?: string;
   maxLength?: string;
   parallel?: string;
@@ -29,6 +30,7 @@ export async function generateCommand(targetPath: string, options: GenerateOptio
       frameworks: options.framework ? [options.framework as any] : ['react'],
       namingStrategy: { type: options.naming as any || 'kebab-case' },
       prefix: options.prefix || 'test',
+      attributeName: options.attributeName || 'data-testid',
       maxIdLength: parseInt(options.maxLength || '50'),
       exclude: options.exclude || [],
       preserveExisting: true,
@@ -170,7 +172,7 @@ export async function generateCommand(targetPath: string, options: GenerateOptio
           result.transformations.slice(0, 3).forEach(transform => {
             const element = transform.element;
             const preview = element.content ? ` "${element.content}"` : '';
-            console.log(`     ${chalk.dim('+')} ${element.tag}${preview} → data-testid="${transform.value}"`);
+            console.log(`     ${chalk.dim('+')} ${element.tag}${preview} → ${transform.attribute}="${transform.value}"`);
           });
           
           if (result.transformations.length > 3) {

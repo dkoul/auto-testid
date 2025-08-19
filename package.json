@@ -1,15 +1,19 @@
 {
   "name": "auto-testid",
-  "version": "1.0.0",
-  "description": "Automated data-testid generator for UI testing - dual npm package and VSCode extension",
+  "version": "2.0.0",
+  "description": "Automated custom attribute generator for React and Vue.js - supports testing, analytics, and automation workflows",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
   "keywords": [
     "testing",
-    "automation",
+    "automation", 
+    "analytics",
     "data-testid",
+    "data-qa",
+    "data-analytics",
+    "custom-attributes",
     "react",
     "vue",
     "angular",

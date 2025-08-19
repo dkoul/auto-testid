@@ -75,6 +75,7 @@ export interface ConfigurationSchema {
   frameworks: Framework[];
   namingStrategy: NamingStrategy;
   prefix?: string;
+  attributeName: string;
   exclude: string[];
   includeElementTypes: string[];
   customRules: CustomRule[];
@@ -189,6 +190,7 @@ export const DEFAULT_CONFIG: ConfigurationSchema = {
   frameworks: ['react', 'vue', 'angular', 'html'],
   namingStrategy: { type: 'kebab-case' },
   prefix: 'test',
+  attributeName: 'data-testid',
   exclude: [
     '**/node_modules/**',
     '**/dist/**',
@@ -306,7 +308,7 @@ class AutoTestIDCoreImpl implements AutoTestIDCore {
 
       // Extract existing test IDs from all elements
       parseResult.elements.forEach(element => {
-        const testId = element.attributes['data-testid'];
+        const testId = element.attributes[effectiveConfig.attributeName];
         if (testId) {
           existingIds.add(testId);
         }
@@ -336,7 +338,7 @@ class AutoTestIDCoreImpl implements AutoTestIDCore {
           transformations.push({
             type: 'add-attribute',
             element,
-            attribute: 'data-testid',
+            attribute: effectiveConfig.attributeName,
             value: generatedId,
             position: element.position,
           });

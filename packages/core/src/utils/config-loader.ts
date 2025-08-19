@@ -25,6 +25,7 @@ export class ConfigurationLoader implements ConfigLoader {
     frameworks: ['react', 'vue', 'angular', 'html'],
     namingStrategy: { type: 'kebab-case' },
     prefix: 'test',
+    attributeName: 'data-testid',
     exclude: [
       '**/node_modules/**',
       '**/dist/**',

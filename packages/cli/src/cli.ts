@@ -15,7 +15,7 @@ const packageInfo = require('../package.json');
 
 program
   .name('auto-testid')
-  .description('🎯 Automatically generate data-testid attributes for UI testing')
+  .description('🎯 Automatically generate custom attributes for UI testing and analytics')
   .version(packageInfo.version, '-v, --version', 'Display version number')
   .helpOption('-h, --help', 'Display help information');
 
@@ -30,7 +30,7 @@ program
 program
   .command('generate')
   .alias('gen')
-  .description('Generate data-testid attributes for files or directories')
+  .description('Generate custom attributes for files or directories')
   .argument('[path]', 'File or directory path to process', process.cwd())
   .option('-f, --framework <framework>', 'Target framework (react, vue, angular, html)', 'react')
   .option('-d, --dry-run', 'Show what would be changed without modifying files', false)
@@ -38,6 +38,7 @@ program
   .option('-e, --exclude <patterns...>', 'Exclude patterns (glob)')
   .option('-i, --include <patterns...>', 'Include patterns (glob)')
   .option('-p, --prefix <prefix>', 'Test ID prefix', 'test')
+  .option('-a, --attribute-name <name>', 'Attribute name to add', 'data-testid')
   .option('--naming <strategy>', 'Naming strategy (kebab-case, camelCase, snake_case)', 'kebab-case')
   .option('--max-length <number>', 'Maximum test ID length', '50')
   .option('--parallel <number>', 'Number of parallel workers', '4')
@@ -92,6 +93,7 @@ program
     
     console.log(chalk.yellow('Customization:'));
     console.log('  auto-testid generate ./src --prefix e2e --naming camelCase');
+    console.log('  auto-testid generate ./src --attribute-name data-analytics --prefix track');
     console.log('  auto-testid generate ./src --exclude "**/*.test.*" "**/*.spec.*"');
     console.log('  auto-testid generate ./src --max-length 30 --backup\n');
     
