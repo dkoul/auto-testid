@@ -1,6 +1,6 @@
 {
   "name": "@dkoul/auto-testid-cli",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Command-line interface for React and Vue.js custom attribute generation",
   "main": "dist/cli.js",
   "bin": {
@@ -41,7 +41,7 @@
   "author": "Auto-TestID Team",
   "license": "MIT",
   "dependencies": {
-    "@dkoul/auto-testid-core": "^2.0.0",
+    "@dkoul/auto-testid-core": "^2.0.1",
     "chalk": "^5.3.0",
     "commander": "^11.0.0",
     "inquirer": "^9.2.0",
@@ -61,7 +61,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/auto-testid/auto-testid.git",
+    "url": "https://github.com/dkoul/auto-testid.git",
     "directory": "packages/cli"
   }
 }

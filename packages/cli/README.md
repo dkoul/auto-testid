@@ -1,31 +1,34 @@
 # @dkoul/auto-testid-cli
 
-🖥️ **Command-line interface for automated data-testid generation**
+🖥️ **Command-line interface for React and Vue.js custom attribute generation**
 
-## Overview
+## V2.0 Features
 
-The `@auto-testid/cli` package provides a powerful command-line tool for automatically generating semantic `data-testid` attributes in your React, Vue, Angular, and HTML projects. Perfect for improving E2E testing workflows and QA automation.
+✨ **Configurable Attribute Names** - Generate any custom attribute:
+```bash
+# E2E Testing (default)
+auto-testid generate ./src --attribute-name data-testid --prefix test
 
-## Features
+# Analytics Tracking
+auto-testid generate ./src --attribute-name data-analytics --prefix track
 
-✅ **Professional CLI Experience**
-- Beautiful progress indicators and colored output
-- Comprehensive error handling and validation
-- Dry-run mode to preview changes safely
-- Backup file creation for safety
-- Detailed metrics and performance reporting
+# QA Automation  
+auto-testid generate ./src --attribute-name data-qa --prefix qa
 
-✅ **Flexible Processing**
-- Single file or entire directory processing
-- Framework auto-detection or manual specification
-- Configurable include/exclude patterns
-- Batch processing with progress tracking
+# Custom attributes for any purpose
+auto-testid generate ./src --attribute-name data-custom --prefix my
+```
 
-✅ **Production Ready**
-- Zero breaking changes to existing code
-- Semantic, readable test ID generation
-- Conflict resolution and uniqueness guarantees
-- Integration with CI/CD pipelines
+🎯 **Vue.js Support** - Full Single File Component (.vue) processing:
+```bash
+# Process Vue components
+auto-testid generate ./src --framework vue
+
+# Vue with custom attributes
+auto-testid generate ./src --framework vue --attribute-name data-track --prefix analytics
+```
+
+🔄 **React Support** - Enhanced JSX/TSX processing with TypeScript support
 
 ## Installation
 
@@ -34,288 +37,246 @@ The `@auto-testid/cli` package provides a powerful command-line tool for automat
 npm install -g @dkoul/auto-testid-cli
 ```
 
-### Project-Specific Installation
-```bash
-npm install --save-dev @dkoul/auto-testid-cli
-```
-
 ### One-time Usage
 ```bash
-npx @dkoul/auto-testid-cli generate ./src
+npx @dkoul/auto-testid-cli generate ./src --dry-run
 ```
 
 ## Quick Start
 
-### 1. Initialize Configuration (Optional)
+### 1. Preview Changes (Dry Run)
 ```bash
-auto-testid init
+# React components
+auto-testid generate ./src --dry-run --framework react
+
+# Vue components
+auto-testid generate ./src --dry-run --framework vue
+
+# Custom attributes for analytics
+auto-testid generate ./src --dry-run --attribute-name data-analytics --prefix track
 ```
 
-### 2. Preview Changes (Dry Run)
+### 2. Apply Changes Safely
 ```bash
-auto-testid generate ./src --dry-run
+# React with data-testid
+auto-testid generate ./src --framework react --backup
+
+# Vue with custom analytics attributes  
+auto-testid generate ./src --framework vue --attribute-name data-analytics --prefix track --backup
 ```
 
-### 3. Apply Changes with Backup
+## Command Reference
+
+### Generate Command
 ```bash
-auto-testid generate ./src --backup
+auto-testid generate <path> [options]
 ```
 
-## Commands
-
-### `generate` (Main Command)
-Generate data-testid attributes for files or directories.
-
-```bash
-auto-testid generate [path] [options]
-```
-
-**Options:**
-- `--framework <framework>` - Target framework (react, vue, angular, html)
-- `--dry-run` - Preview changes without modifying files  
+**Essential Options:**
+- `--framework <type>` - Target framework: `react`, `vue`, `angular`, `html`
+- `--attribute-name <name>` - Custom attribute name (default: `data-testid`)
+- `--prefix <string>` - Custom prefix for values (default: `test`)
+- `--dry-run` - Preview changes without modifying files
 - `--backup` - Create backup files before modification
-- `--prefix <prefix>` - Test ID prefix (default: "test")
-- `--naming <strategy>` - Naming strategy (kebab-case, camelCase, snake_case)
-- `--exclude <patterns>` - Exclude file patterns
-- `--include <patterns>` - Include file patterns
-- `--config <path>` - Path to configuration file
 
-### `scan`
-Scan directory for files that would be processed.
+**Advanced Options:**
+- `--naming <strategy>` - Naming convention: `kebab-case`, `camelCase`, `snake_case`
+- `--exclude <patterns>` - Exclude file patterns (glob)
+- `--include <patterns>` - Include file patterns (glob)
+- `--max-length <number>` - Maximum attribute value length
 
+### Scan Command
 ```bash
-auto-testid scan [path] [options]
+auto-testid scan <path> [options]
 ```
 
-**Options:**
 - `--stats` - Show detailed file statistics
-- `--framework <framework>` - Filter by framework
+- `--framework <type>` - Filter by framework
 
-### `validate`
-Validate existing data-testid attributes (coming soon).
+## Real-World Examples
 
+### E2E Testing Setup
 ```bash
-auto-testid validate [path] [options]
+# Step 1: Scan React project
+auto-testid scan ./src --framework react --stats
+# Result: Found 25 React files
+
+# Step 2: Preview test ID generation  
+auto-testid generate ./src --dry-run --framework react
+# Result: Would add 180 data-testid attributes
+
+# Step 3: Apply changes with backup
+auto-testid generate ./src --framework react --backup
+# Result: Successfully added 175 data-testid attributes
 ```
 
-### `init`
-Initialize configuration file.
-
+### Analytics Tracking Setup
 ```bash
-auto-testid init [options]
+# Step 1: Scan Vue.js project
+auto-testid scan ./src --framework vue --stats  
+# Result: Found 18 Vue files
+
+# Step 2: Preview analytics attributes
+auto-testid generate ./src --dry-run --framework vue --attribute-name data-analytics --prefix track
+# Result: Would add 142 data-analytics attributes
+
+# Step 3: Apply analytics tracking
+auto-testid generate ./src --framework vue --attribute-name data-analytics --prefix track --backup
+# Result: Successfully added 138 data-analytics attributes
 ```
 
-**Options:**
-- `--format <format>` - Configuration format (json, js)
-- `--interactive` - Interactive setup (coming soon)
+## Generated Attributes Examples
 
-### `examples`
-Show usage examples and best practices.
+### React Components
 
-```bash
-auto-testid examples
+**Input:**
+```tsx
+function LoginForm() {
+  return (
+    <form className="login-form">
+      <input type="email" placeholder="Email" />
+      <button type="submit">Sign In</button>
+    </form>
+  );
+}
 ```
 
-## Usage Examples
-
-### Basic Usage
-```bash
-# Generate test IDs for all React components in src/
-auto-testid generate ./src --framework react
-
-# Preview changes without modifying files
-auto-testid generate ./src --dry-run
-
-# Generate with custom prefix and backup
-auto-testid generate ./src --prefix e2e --backup
+**Output (data-testid):**
+```tsx
+function LoginForm() {
+  return (
+    <form className="login-form" data-testid="test-form-login">
+      <input type="email" placeholder="Email" data-testid="test-email-input" />
+      <button type="submit" data-testid="test-sign-btn">Sign In</button>
+    </form>
+  );
+}
 ```
 
-### Framework-Specific
-```bash
-# React/TypeScript project
-auto-testid generate ./src --framework react --naming camelCase
-
-# Vue project (when supported)
-auto-testid generate ./src --framework vue
-
-# Mixed project with custom patterns
-auto-testid generate ./src --include "**/*.{tsx,vue}" --exclude "**/test/**"
+**Output (data-analytics):**
+```tsx
+function LoginForm() {
+  return (
+    <form className="login-form" data-analytics="track-form-login">
+      <input type="email" placeholder="Email" data-analytics="track-email-input" />
+      <button type="submit" data-analytics="track-sign-btn">Sign In</button>
+    </form>
+  );
+}
 ```
 
-### Advanced Usage
-```bash
-# Custom configuration file
-auto-testid generate ./src --config .autotestidrc.json
+### Vue Components
 
-# Exclude specific patterns
-auto-testid generate ./src --exclude "**/node_modules/**" "**/*.test.*"
-
-# Maximum ID length limit
-auto-testid generate ./src --max-length 40 --naming snake_case
+**Input:**
+```vue
+<template>
+  <div class="user-profile">
+    <h2>{{ user.name }}</h2>
+    <button @click="editProfile">Edit Profile</button>
+  </div>
+</template>
 ```
 
-### CI/CD Integration
-```bash
-# Check what would be generated (exit code 0 if changes needed)
-auto-testid generate ./src --dry-run --silent
-
-# Apply changes in CI pipeline
-auto-testid generate ./src --backup --silent
+**Output:**
+```vue
+<template>
+  <div class="user-profile" data-testid="test-profile-user-container">
+    <h2 data-testid="test-name-heading">{{ user.name }}</h2>
+    <button @click="editProfile" data-testid="test-edit-profile-btn">Edit Profile</button>
+  </div>
+</template>
 ```
 
 ## Configuration File
 
 Create `.autotestidrc.json` in your project root:
 
+**Testing Setup:**
 ```json
 {
-  "frameworks": ["react"],
-  "namingStrategy": { "type": "kebab-case" },
+  "attributeName": "data-testid",
   "prefix": "test",
-  "exclude": [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/*.test.*",
-    "**/*.spec.*"
-  ],
-  "includeElementTypes": [
-    "button", "input", "select", "textarea", 
-    "form", "a", "div", "span"
-  ],
-  "maxIdLength": 50,
-  "preserveExisting": true
+  "frameworks": ["react", "vue"],
+  "naming": "kebab-case",
+  "exclude": ["**/*.test.*", "**/*.spec.*"],
+  "backup": true
 }
 ```
 
-Or JavaScript config `autotestid.config.js`:
-
-```javascript
-module.exports = {
-  frameworks: ['react'],
-  namingStrategy: { type: 'kebab-case' },
-  prefix: 'test',
-  exclude: ['**/node_modules/**', '**/dist/**'],
-  includeElementTypes: ['button', 'input', 'select', 'textarea', 'form', 'a'],
-  maxIdLength: 50,
-  preserveExisting: true,
-};
+**Analytics Setup:**
+```json
+{
+  "attributeName": "data-analytics",
+  "prefix": "track", 
+  "frameworks": ["react", "vue"],
+  "naming": "camelCase",
+  "exclude": ["**/node_modules/**"],
+  "backup": true
+}
 ```
 
-## Sample Output
-
+Then run simply:
 ```bash
-$ auto-testid generate ./src --dry-run
-
-🎯 Auto-TestID Generation Results
-
-📋 Dry Run Mode - No files were modified
-
-📊 Summary:
-   Files processed: 15
-   Elements found: 127
-   Test IDs generated: 89
-
-✅ Successfully processed:
-   ✓ LoginForm.tsx (12 test IDs, 8ms)
-     + button "Sign In" → data-testid="test-sign-btn"
-     + input[type="email"] → data-testid="test-email-input"
-     + form → data-testid="test-login-form"
-     ... and 9 more
-   
-   ✓ UserCard.tsx (8 test IDs, 5ms)
-   ✓ Navigation.tsx (15 test IDs, 7ms)
-   ...
-
-⚡ Performance:
-   Total time: 156ms
-   Average per file: 10.4ms
-
-💡 Next steps:
-   • Run without --dry-run to apply 89 changes
-   • Use --backup to create backup files
+auto-testid generate ./src
 ```
+
+## Use Cases
+
+- 🧪 **E2E Testing**: `data-testid` attributes for Cypress, Playwright, Selenium
+- 📊 **Analytics Tracking**: `data-analytics` attributes for user behavior analysis
+- 🔍 **QA Automation**: `data-qa` attributes for quality assurance workflows
+- 🎯 **A/B Testing**: `data-experiment` attributes for testing frameworks
+- 🤖 **Custom Automation**: Any custom attribute for your specific needs
 
 ## Integration Examples
 
-### Package.json Scripts
-```json
-{
-  "scripts": {
-    "testids:preview": "auto-testid generate ./src --dry-run",
-    "testids:apply": "auto-testid generate ./src --backup",
-    "testids:scan": "auto-testid scan ./src --stats"
-  }
-}
+### Cypress Testing
+```javascript
+// Using generated data-testid attributes
+cy.get('[data-testid="test-form-login"]').should('be.visible');
+cy.get('[data-testid="test-email-input"]').type('user@example.com');
+cy.get('[data-testid="test-sign-btn"]').click();
 ```
 
-### Pre-commit Hook
-```bash
-# .husky/pre-commit
-auto-testid generate ./src --dry-run --silent || {
-  echo "❌ Missing test IDs detected. Run 'npm run testids:apply' to fix."
-  exit 1
-}
+### Analytics Tracking
+```javascript
+// Using generated data-analytics attributes
+document.querySelectorAll('[data-analytics]').forEach(element => {
+  element.addEventListener('click', (e) => {
+    const trackingId = e.target.getAttribute('data-analytics');
+    analytics.track('element_clicked', { id: trackingId });
+  });
+});
 ```
 
-### GitHub Actions
-```yaml
-- name: Generate Test IDs
-  run: |
-    npx @dkoul/auto-testid-cli generate ./src --dry-run --silent
-    if [ $? -eq 1 ]; then
-      echo "::warning::Missing test IDs detected"
-    fi
-```
+## Framework Support
 
-## Supported Frameworks
+| Framework | Status | File Types | Features |
+|-----------|--------|------------|----------|
+| **React** | ✅ Full | `.jsx`, `.tsx`, `.js`, `.ts` | JSX parsing, TypeScript support |
+| **Vue.js** | ✅ Full | `.vue` | SFC parsing, Vue directives |
+| **Angular** | 🚧 Planned | `.html`, `.ts` | Coming soon |
+| **HTML** | 🚧 Planned | `.html` | Coming soon |
 
-| Framework | Status | File Extensions |
-|-----------|--------|-----------------|
-| React/JSX | ✅ Complete | `.jsx`, `.tsx`, `.js`, `.ts` |
-| Vue SFC | 🚧 Planned | `.vue` |
-| Angular | 🚧 Planned | `.html`, `.ts` |
-| HTML | 🚧 Planned | `.html` |
+## Best Practices
 
-## Troubleshooting
-
-### Common Issues
-
-**No files found:**
-```bash
-# Check your include/exclude patterns
-auto-testid scan ./src --stats
-```
-
-**Permission errors:**
-```bash
-# Ensure write permissions
-chmod -R u+w ./src
-```
-
-**Configuration not loading:**
-```bash
-# Verify config file location and syntax
-auto-testid generate ./src --config .autotestidrc.json --dry-run
-```
+1. **Always use --dry-run first** to preview changes
+2. **Enable --backup** for safety on production code
+3. **Choose meaningful attribute names** for your use case
+4. **Use consistent prefixes** across your application
+5. **Exclude test files** to avoid adding attributes to test code
 
 ## Performance
 
 - **Small projects** (< 50 files): ~100ms
-- **Medium projects** (50-200 files): ~500ms  
+- **Medium projects** (50-200 files): ~500ms
 - **Large projects** (200+ files): ~2s
-
-Processing is highly optimized with intelligent caching and parallel execution.
-
-## Contributing
-
-We welcome contributions! See our [Contributing Guide](https://github.com/auto-testid/auto-testid/blob/main/CONTRIBUTING.md).
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT License - see [LICENSE](https://github.com/dkoul/auto-testid/blob/main/LICENSE) for details.
 
 ---
 
 **Part of the Auto-TestID ecosystem:**
-- [`@auto-testid/core`](https://npmjs.com/package/@auto-testid/core) - Core parsing and transformation logic
-- [`@auto-testid/vscode-extension`](https://marketplace.visualstudio.com/items?itemName=auto-testid.vscode-extension) - VSCode extension (coming soon) 
+- [`@dkoul/auto-testid-core`](https://npmjs.com/package/@dkoul/auto-testid-core) - Core parsing and transformation logic
